@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using VisitAPI.Models;
-using VisitAPI.Data;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using VisitAPI.Data;
+using VisitAPI.Models;
 
 namespace VisitAPI.Controllers
 {
@@ -12,34 +12,67 @@ namespace VisitAPI.Controllers
     public class LabRequestController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly HttpClient _client;
+        private readonly HttpClient _httpClient;
+        private readonly ILogger<LabRequestController> _logger;
 
-        public LabRequestController(ApplicationDbContext context)
+        public LabRequestController(ApplicationDbContext context, ILogger<LabRequestController> logger)
         {
             _context = context;
-            _client = new HttpClient();
+            _logger = logger;
+            _httpClient = new HttpClient();
         }
 
-        [HttpPost("PostToLIMS")]
-        public async Task<IActionResult> PostToLIMS([FromBody] LabRequest request)
+        [HttpPost("add")]
+        public async Task<IActionResult> AddLabRequest([FromBody] LabRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (request == null)
+                return BadRequest("Request body cannot be null.");
 
-            _context.LabRequests.Add(request);
-            await _context.SaveChangesAsync();
+            try
+            {
+                // Step 1: Insert into SQL database
+                bool inserted = await _context.AddLabRequestAsync(request);
 
-            // Prepare payload for LIMS
-            var json = JsonSerializer.Serialize(request);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            _client.DefaultRequestHeaders.Add("x-api-key", "YOUR_API_KEY");
+                if (!inserted)
+                    return StatusCode(500, new { message = "Database insert failed." });
 
-            var response = await _client.PostAsync("http://157.230.183.65:5050/v1/labRequest/post", content);
+                // Step 2: Post same data to external LIMS API
+                string apiUrl = "http://157.230.183.65:5050/v1/labRequest/post";
+                string apiKey = "<YOUR_API_KEY>"; // replace with your actual key
 
-            if (response.IsSuccessStatusCode)
-                return Ok(await response.Content.ReadAsStringAsync());
+                var json = JsonSerializer.Serialize(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                _httpClient.DefaultRequestHeaders.Clear();
+                _httpClient.DefaultRequestHeaders.Add("x-api-key", apiKey);
+                _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
+                var response = await _httpClient.PostAsync(apiUrl, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseBody = await response.Content.ReadAsStringAsync();
+                    return Ok(new
+                    {
+                        message = "Lab request saved successfully to SQL and posted to LIMS.",
+                        lims_response = responseBody
+                    });
+                }
+                else
+                {
+                    var errorBody = await response.Content.ReadAsStringAsync();
+                    _logger.LogWarning("LIMS API call failed: {Error}", errorBody);
+                    return Ok(new
+                    {
+                        message = "Saved to SQL, but failed to send to LIMS.",
+                        lims_error = errorBody
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding lab request.");
+                return StatusCode(500, new { message = "Internal server error.", error = ex.Message });
+            }
         }
     }
 }
