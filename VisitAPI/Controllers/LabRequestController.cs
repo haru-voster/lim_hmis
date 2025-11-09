@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using VisitAPI.Data;
 using VisitAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace VisitAPI.Controllers
 {
@@ -30,11 +31,9 @@ namespace VisitAPI.Controllers
 
             try
             {
-                // Step 1: Insert into SQL database
-                bool inserted = await _context.AddLabRequestAsync(request);
-
-                if (!inserted)
-                    return StatusCode(500, new { message = "Database insert failed." });
+                // Step 1: Insert into SQL database using EF Core
+                await _context.LabRequests.AddAsync(request);
+                await _context.SaveChangesAsync();
 
                 // Step 2: Post same data to external LIMS API
                 string apiUrl = "http://157.230.183.65:5050/v1/labRequest/post";
@@ -73,6 +72,13 @@ namespace VisitAPI.Controllers
                 _logger.LogError(ex, "Error adding lab request.");
                 return StatusCode(500, new { message = "Internal server error.", error = ex.Message });
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetLabRequests()
+        {
+            var labRequests = await _context.LabRequests.ToListAsync();
+            return Ok(labRequests);
         }
     }
 }
