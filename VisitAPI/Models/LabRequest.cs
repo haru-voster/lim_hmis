@@ -33,7 +33,7 @@ namespace VisitAPI.Models
         public string? RequestedByName { get; set; }
         public string? OpenMrsId { get; set; }
 
-        // Navigation property
+        
         public List<LabTest>? LabTests { get; set; }
     }
 
@@ -47,10 +47,10 @@ namespace VisitAPI.Models
 
         // Foreign key to LabRequest
         [JsonIgnore]
-        public int LabRequestId { get; set; } // FK for EF
+        public int LabRequestId { get; set; } 
 
         [ForeignKey("LabRequestId")]
         [JsonIgnore]
-        public LabRequest? LabRequest { get; set; } // Navigation property
+        public LabRequest? LabRequest { get; set; } 
     }
 }
