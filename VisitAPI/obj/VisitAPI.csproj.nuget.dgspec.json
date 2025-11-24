@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\Desktop\\api\\VisitAPI\\VisitAPI.csproj": {}
+    "C:\\Users\\VOSTERPC\\Desktop\\VOSTER\\lim_hmis\\VisitAPI\\VisitAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\Desktop\\api\\VisitAPI\\VisitAPI.csproj": {
+    "C:\\Users\\VOSTERPC\\Desktop\\VOSTER\\lim_hmis\\VisitAPI\\VisitAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\api\\VisitAPI\\VisitAPI.csproj",
+        "projectUniqueName": "C:\\Users\\VOSTERPC\\Desktop\\VOSTER\\lim_hmis\\VisitAPI\\VisitAPI.csproj",
         "projectName": "VisitAPI",
-        "projectPath": "C:\\Users\\Admin\\Desktop\\api\\VisitAPI\\VisitAPI.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Desktop\\api\\VisitAPI\\obj\\",
+        "projectPath": "C:\\Users\\VOSTERPC\\Desktop\\VOSTER\\lim_hmis\\VisitAPI\\VisitAPI.csproj",
+        "packagesPath": "C:\\Users\\VOSTERPC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\VOSTERPC\\Desktop\\VOSTER\\lim_hmis\\VisitAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\VOSTERPC\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -38,7 +38,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -90,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
