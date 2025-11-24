@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'drf_yasg',
+    'rest_framework',
+
     'labapp',
 ]
 
@@ -76,16 +78,18 @@ WSGI_APPLICATION = 'hospital.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'DjangoDB',
+        'NAME': 'HospitalDB',
         'USER': 'sa',
-        'PASSWORD': 'Admin2025!',
-        'HOST': r'DATA\MSSQL2025',  # raw string for backslash
-        'PORT': '',                  # leave empty or use '1433'
+        'PASSWORD': '@voster',
+        'HOST': 'vosterpc',
+        'PORT': '1433',
+
         'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',  
+            'driver': 'ODBC Driver 17 for SQL Server',
         },
     }
 }
+
 
 
 # Password validation
