@@ -31,15 +31,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+   
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'drf_yasg',
-    'rest_framework',
 
+    'rest_framework',
+    'drf_yasg',   # swagger
+    # your apps
     'labapp',
 ]
 
@@ -79,13 +81,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'mssql',
         'NAME': 'HospitalDB',
-        'USER': 'sa',
-        'PASSWORD': '@voster',
-        'HOST': 'vosterpc',
-        'PORT': '1433',
-
+        'HOST': 'VOSTER\\MSSQL2026',
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
+            'trusted_connection': 'yes',
         },
     }
 }
